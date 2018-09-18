@@ -29,6 +29,8 @@ typedef uint64_t insn_t;
 
 static inline unsigned int riscv_insn_length (insn_t insn)
 {
+  if ((insn & 0x7) == 0x07) /* RVV */
+    return 4;
   if ((insn & 0x3) != 0x3) /* RVC.  */
     return 2;
   if ((insn & 0x1f) != 0x1f) /* Base ISA and extensions in 32-bit space.  */
@@ -232,6 +234,10 @@ static const char * const riscv_pred_succ[16] =
 #define OP_MASK_CRS2S 0x7
 #define OP_SH_CRS2S 2
 
+/* RVV fields. */
+#define OP_MASK_VP 0x1
+#define OP_SH_VP 0x12
+
 /* ABI names for selected x-registers.  */
 
 #define X_RA 1
@@ -245,6 +251,7 @@ static const char * const riscv_pred_succ[16] =
 
 #define NGPR 32
 #define NFPR 32
+#define NVECR 32
 
 /* Replace bits MASK << SHIFT of STRUCT with the equivalent bits in
    VALUE << SHIFT.  VALUE is evaluated exactly once.  */
@@ -338,6 +345,7 @@ extern const char * const riscv_gpr_names_numeric[NGPR];
 extern const char * const riscv_gpr_names_abi[NGPR];
 extern const char * const riscv_fpr_names_numeric[NFPR];
 extern const char * const riscv_fpr_names_abi[NFPR];
+extern const char * const riscv_vecr_names_numeric[NFPR];
 
 extern const struct riscv_opcode riscv_opcodes[];
 
