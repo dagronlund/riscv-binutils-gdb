@@ -717,7 +717,7 @@ const struct riscv_opcode riscv_opcodes[] =
 {"vsetvl",    "V",   "d,s", MATCH_VSETVL, MASK_VSETVL, match_opcode, 0},
 {"vconfig",   "V",   "j", MATCH_VCONFIG, MASK_VCONFIG, match_opcode, 0},
 {"vlh",       "V",   "Vd,s", MATCH_VLH, MASK_VLH, match_opcode, 0},
-{"vsh",       "V",   "d,Vs", MATCH_VSH, MASK_VSH, match_opcode, 0},
+{"vsh",       "V",   "t,Vs", MATCH_VSH, MASK_VSH, match_opcode, 0},
 
 /* Terminate the list.  */
 {0, 0, 0, 0, 0, 0, 0}

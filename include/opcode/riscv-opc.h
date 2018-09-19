@@ -780,6 +780,14 @@
 #define CSR_MHPMCOUNTER29H 0xb9d
 #define CSR_MHPMCOUNTER30H 0xb9e
 #define CSR_MHPMCOUNTER31H 0xb9f
+
+#define CSR_VREGMAX 0x400
+#define CSR_VEMAXW 0x401
+#define CSR_VTYPEEN 0x402
+#define CSR_VL 0x403
+#define CSR_VXRM 0x404
+#define CSR_VXCM 0x405
+
 #define CAUSE_MISALIGNED_FETCH 0x0
 #define CAUSE_FAULT_FETCH 0x1
 #define CAUSE_ILLEGAL_INSTRUCTION 0x2
@@ -795,14 +803,14 @@
 
 #define MATCH_VADD 0x80004067
 #define MASK_VADD 0xfe00707f
-#define MATCH_VSETVL 0x1007
+#define MATCH_VSETVL 0x100f
 #define MASK_VSETVL 0xfff0707f
-#define MATCH_VCONFIG 0x8f87
+#define MATCH_VCONFIG 0x7
 #define MASK_VCONFIG 0xfffff
 #define MATCH_VLH 0xf9f04007
 #define MASK_VLH 0xfff0707f
-#define MATCH_VSH 0xf9f04027
-#define MASK_VSH 0xfff0707f
+#define MATCH_VSH 0xf8004027
+#define MASK_VSH 0xfe007fff
 
 #endif
 #ifdef DECLARE_INSN
