@@ -705,8 +705,6 @@ const struct riscv_opcode riscv_opcodes[] =
 {"hret",      "I",   "",     MATCH_HRET, MASK_HRET, match_opcode, 0 },
 {"mret",      "I",   "",     MATCH_MRET, MASK_MRET, match_opcode, 0 },
 {"dret",      "I",   "",     MATCH_DRET, MASK_DRET, match_opcode, 0 },
-{"sfence.vm", "I",   "",     MATCH_SFENCE_VM, MASK_SFENCE_VM | MASK_RS1, match_opcode, 0 },
-{"sfence.vm", "I",   "s",    MATCH_SFENCE_VM, MASK_SFENCE_VM, match_opcode, 0 },
 {"sfence.vma","I",   "",     MATCH_SFENCE_VMA, MASK_SFENCE_VMA | MASK_RS1 | MASK_RS2, match_opcode, INSN_ALIAS },
 {"sfence.vma","I",   "s",    MATCH_SFENCE_VMA, MASK_SFENCE_VMA | MASK_RS2, match_opcode, INSN_ALIAS },
 {"sfence.vma","I",   "s,t",  MATCH_SFENCE_VMA, MASK_SFENCE_VMA, match_opcode, 0 },
@@ -715,10 +713,11 @@ const struct riscv_opcode riscv_opcodes[] =
 /* Vector instructions */
 {"vadd",      "V",   "Vd,Vs,Vt", MATCH_VADD, MASK_VADD, match_opcode, 0 },
 {"vmul",      "V",   "Vd,Vs,Vt", MATCH_VMUL, MASK_VMUL, match_opcode, 0 },
-{"vsetvl",    "V",   "d,s", MATCH_VSETVL, MASK_VSETVL, match_opcode, 0},
-{"vconfig",   "V",   "j", MATCH_VCONFIG, MASK_VCONFIG, match_opcode, 0},
-{"vlh",       "V",   "Vd,s", MATCH_VLH, MASK_VLH, match_opcode, 0},
-{"vsh",       "V",   "t,Vs", MATCH_VSH, MASK_VSH, match_opcode, 0},
+{"vredsum",   "V",   "Vd,Vs,Vt", MATCH_VREDSUM, MASK_VREDSUM, match_opcode, 0 },
+{"vsetvl",    "V",   "d,s", MATCH_VSETVL, MASK_VSETVL | MASK_IMM, match_opcode, 0},
+{"vconfig",   "V",   "j",   MATCH_VCONFIG, MASK_VCONFIG | MASK_RD | MASK_RS1, match_opcode, 0},
+{"vlh",       "V",   "Vd,s",  MATCH_VLH, MASK_VLH | MASK_RS2, match_opcode, 0},
+{"vsh",       "V",   "t,Vs",  MATCH_VSH, MASK_VSH | MASK_RD, match_opcode, 0},
 
 /* Terminate the list.  */
 {0, 0, 0, 0, 0, 0, 0}
