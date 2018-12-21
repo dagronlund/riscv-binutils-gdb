@@ -712,13 +712,17 @@ const struct riscv_opcode riscv_opcodes[] =
 
 /* Vector instructions */
 {"vadd",      "V",   "Vd,Vs,Vt", MATCH_VADD, MASK_VADD, match_opcode, 0 },
+{"vsub",      "V",   "Vd,Vs,Vt", MATCH_VSUB, MASK_VSUB, match_opcode, 0 },
 {"vmul",      "V",   "Vd,Vs,Vt", MATCH_VMUL, MASK_VMUL, match_opcode, 0 },
+{"vpermute",  "V",   "Vd,Vs,Vt", MATCH_VPERMUTE, MASK_VPERMUTE, match_opcode, 0 },
 {"vredsum",   "V",   "Vd,Vs", MATCH_VREDSUM, MASK_VREDSUM | MASK_RS2, match_opcode, 0 },
 {"vsetvl",    "V",   "d,s", MATCH_VSETVL, MASK_VSETVL | MASK_IMM, match_opcode, 0},
 {"vconfig",   "V",   "j",   MATCH_VCONFIG, MASK_VCONFIG | MASK_RD | MASK_RS1, match_opcode, 0},
 {"vlh",       "V",   "Vd,s",  MATCH_VLH, MASK_VLH | MASK_RS2, match_opcode, 0},
 {"vlxh",      "V",   "Vd,s,Vt",  MATCH_VLXH, MASK_VLXH, match_opcode, 0},
+{"vlsh",      "V",   "Vd,s,t",  MATCH_VLSH, MASK_VLSH, match_opcode, 0},
 {"vsh",       "V",   "t,Vs",  MATCH_VSH, MASK_VSH | MASK_RD, match_opcode, 0},
+{"vssh",      "V",   "d,Vs,t",  MATCH_VSSH, MASK_VSSH, match_opcode, 0},
 
 /* Terminate the list.  */
 {0, 0, 0, 0, 0, 0, 0}
