@@ -713,9 +713,11 @@ const struct riscv_opcode riscv_opcodes[] =
 /* Vector instructions */
 {"vadd",      "V",   "Vd,Vs,Vt", MATCH_VADD, MASK_VADD, match_opcode, 0 },
 {"vsub",      "V",   "Vd,Vs,Vt", MATCH_VSUB, MASK_VSUB, match_opcode, 0 },
+{"vand",      "V",   "Vd,Vs,Vt", MATCH_VAND, MASK_VAND, match_opcode, 0 },
 {"vmul",      "V",   "Vd,Vs,Vt", MATCH_VMUL, MASK_VMUL, match_opcode, 0 },
 {"vpermute",  "V",   "Vd,Vs,Vt", MATCH_VPERMUTE, MASK_VPERMUTE, match_opcode, 0 },
 {"vredsum",   "V",   "Vd,Vs", MATCH_VREDSUM, MASK_VREDSUM | MASK_RS2, match_opcode, 0 },
+{"vcliph",    "V",   "Vd,Vs,t", MATCH_VCLIPH, MASK_VCLIPH, match_opcode, 0 },
 {"vsetvl",    "V",   "d,s", MATCH_VSETVL, MASK_VSETVL | MASK_IMM, match_opcode, 0},
 {"vconfig",   "V",   "j",   MATCH_VCONFIG, MASK_VCONFIG | MASK_RD | MASK_RS1, match_opcode, 0},
 {"vlh",       "V",   "Vd,s",  MATCH_VLH, MASK_VLH | MASK_RS2, match_opcode, 0},
