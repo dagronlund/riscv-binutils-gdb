@@ -485,6 +485,10 @@ static bfd_boolean validate_riscv_insn(const struct riscv_opcode *opc) {
 				case 't':
 					USE_BITS(OP_MASK_RS2, OP_SH_RS2);
 					break;
+				case 'm':
+					USE_BITS(OP_MASK_RS3, OP_SH_RS3);
+					USE_BITS(OP_MASK_M, OP_SH_M);
+					break;
 				default:
 				as_bad(_("internal: bad RISC-V opcode (unknown operand type `C%c'): %s "
 								 "%s"),
