@@ -1272,6 +1272,12 @@ static const char *riscv_ip(char *str, struct riscv_cl_insn *ip,
 							break;
 						INSERT_OPERAND(RS2, *ip, regno);
 						continue;
+					case 'm':
+						if (!reg_lookup(&s, RCLASS_VECR, &regno))
+							break;
+						INSERT_OPERAND(RS3, *ip, regno);
+						INSERT_BITS((*ip).insn_opcode, 1, OP_MASK_M, OP_SH_M);
+						continue;
 					default:
 						as_bad(_("bad RVC field specifier 'C%c'\n"), *args);
 				}
