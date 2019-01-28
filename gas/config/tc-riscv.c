@@ -423,7 +423,7 @@ static bfd_boolean reg_lookup(char **s, enum reg_class class,
 	e = *s;
 	if (is_name_beginner(*e))
 		++e;
-	while (is_part_of_name(*e))
+	while (is_part_of_name(*e) && *e != '.')
 		++e;
 
 	/* Terminate name.  */
@@ -475,6 +475,8 @@ static bfd_boolean validate_riscv_insn(const struct riscv_opcode *opc) {
 	while (*p)
 		switch (c = *p++) {
 		case 'V': /* RVV */
+			USE_BITS(OP_MASK_AQ, OP_SH_AQ);
+			USE_BITS(OP_MASK_RL, OP_SH_RL);
 			switch (c = *p++) {
 				case 's':
 					USE_BITS(OP_MASK_RS1, OP_SH_RS1);
@@ -487,7 +489,6 @@ static bfd_boolean validate_riscv_insn(const struct riscv_opcode *opc) {
 					break;
 				case 'm':
 					USE_BITS(OP_MASK_RS3, OP_SH_RS3);
-					USE_BITS(OP_MASK_M, OP_SH_M);
 					break;
 				default:
 				as_bad(_("internal: bad RISC-V opcode (unknown operand type `C%c'): %s "
@@ -1213,6 +1214,7 @@ static const char *riscv_ip(char *str, struct riscv_cl_insn *ip,
 	unsigned int regno;
 	char save_c = 0;
 	int argnum;
+	char is_scalar = 0;
 	const struct percent_op_match *p;
 	const char *error = "unrecognized opcode";
 
@@ -1244,8 +1246,10 @@ static const char *riscv_ip(char *str, struct riscv_cl_insn *ip,
 			switch (*args) {
 			case '\0': /* End of args.  */
 				if (insn->pinfo != INSN_MACRO) {
-					if (!insn->match_func(insn, ip->insn_opcode))
+					if (!insn->match_func(insn, ip->insn_opcode)) {
+						printf("NO MATCH\n");
 						break;
+					}
 					if (riscv_insn_length(insn->match) == 2 && !riscv_opts.rvc)
 						break;
 				}
@@ -1255,33 +1259,102 @@ static const char *riscv_ip(char *str, struct riscv_cl_insn *ip,
 				error = NULL;
 				goto out;
 
-			case 'V': {
+			case 'V':
 				switch(*++args) {
 					case 's':
-						if (!reg_lookup(&s, RCLASS_VECR, &regno))
-							break;
+						if (!reg_lookup(&s, RCLASS_VECR, &regno)) break;
 						INSERT_OPERAND(RS1, *ip, regno);
+						if(*s == '.' && *(s + 1) == 'k') {
+							s += 2;
+							OR_BITS((*ip).insn_opcode, 0x20, OP_MASK_RS1, OP_SH_RS2);
+						}
 						continue;
 					case 'd':
-						if (!reg_lookup(&s, RCLASS_VECR, &regno))
-							break;
+						if (!reg_lookup(&s, RCLASS_VECR, &regno)) break;
 						INSERT_OPERAND(RD, *ip, regno);
+						unsigned int err = 0;
+						char prev = '\0';
+						for(unsigned int i = 0; i < 2; i++) {
+							if(*s != '.') break;
+							switch(*(s + 1)) {
+								case 'k':
+									if(prev == 'k') {
+										err = 1;
+										break;
+									}
+									OR_BITS((*ip).insn_opcode, 0x20, OP_MASK_RD, OP_SH_RD);
+									break;
+								case 's':
+									if(prev == 's') {
+										err = 1;
+										break;
+									}
+									is_scalar = 1;
+									INSERT_BITS((*ip).insn_opcode, 0x1, OP_MASK_RL, OP_SH_RL);
+									break;
+								default: err = 1;
+							}
+							if(err) break;
+							prev = *(s + 1);
+							s += 2;
+						}
+						if(err) {
+							as_bad(_("bad RVV register modifier'\n"));
+							break;
+						}
 						continue;
 					case 't':
-						if (!reg_lookup(&s, RCLASS_VECR, &regno))
-							break;
+						if (!reg_lookup(&s, RCLASS_VECR, &regno)) break;
 						INSERT_OPERAND(RS2, *ip, regno);
+						if(*s == '.' && *(s + 1) == 'k') {
+							s += 2;
+							OR_BITS((*ip).insn_opcode, 0x20, OP_MASK_RS2, OP_SH_RS2);
+						}
 						continue;
 					case 'm':
-						if (!reg_lookup(&s, RCLASS_VECR, &regno))
-							break;
+						if (!reg_lookup(&s, RCLASS_VECR, &regno)) break;
 						INSERT_OPERAND(RS3, *ip, regno);
-						INSERT_BITS((*ip).insn_opcode, 1, OP_MASK_M, OP_SH_M);
+						err = 0;
+						prev = '\0';
+						for(unsigned int i = 0; i < 2; i++) {
+							if(*s != '.') break;
+							switch(*(s + 1)) {
+								case 'k':
+									if(prev == 'k') {
+										err = 1;
+										break;
+									}
+									OR_BITS((*ip).insn_opcode, 0x20, OP_MASK_RS2, OP_SH_RS2);
+									break;
+								case 't':
+									if(prev == 't' || prev == 'f' || is_scalar) {
+										err = 1;
+										break;
+									}
+									INSERT_BITS((*ip).insn_opcode, 0x1, OP_MASK_AQ, OP_SH_AQ);
+									break;
+								case 'f':
+									if(prev == 't' || prev == 'f' || is_scalar) {
+										err = 1;
+										break;
+									}
+									INSERT_BITS((*ip).insn_opcode, 0x1, OP_MASK_AQ, OP_SH_AQ);
+									INSERT_BITS((*ip).insn_opcode, 0x1, OP_MASK_RL, OP_SH_RL);
+									break;
+								default: err = 1;
+							}
+							if(err) break;
+							prev = *(s + 1);
+							s += 2;
+						}
+						if(err) {
+							as_bad(_("bad RVV register modifier'\n"));
+							break;
+						}
 						continue;
 					default:
-						as_bad(_("bad RVC field specifier 'C%c'\n"), *args);
+						as_bad(_("bad RVV field specifier 'V%c'\n"), *args);
 				}
-			}
 				break;
 			case 'C': /* RVC */
 				switch (*++args) {

@@ -219,8 +219,6 @@ static const char * const riscv_pred_succ[16] =
 #define OP_SH_AQ		26
 #define OP_MASK_RL		0x1
 #define OP_SH_RL		25
-#define OP_MASK_M    0x1
-#define OP_SH_M    12
 
 #define OP_MASK_CUSTOM_IMM	0x7f
 #define OP_SH_CUSTOM_IMM	25
@@ -260,6 +258,9 @@ static const char * const riscv_pred_succ[16] =
 #define INSERT_BITS(STRUCT, VALUE, MASK, SHIFT) \
   (STRUCT) = (((STRUCT) & ~((insn_t)(MASK) << (SHIFT))) \
 	      | ((insn_t)((VALUE) & (MASK)) << (SHIFT)))
+
+#define OR_BITS(STRUCT, VALUE, MASK, SHIFT) \
+  (STRUCT) = ((STRUCT) | ((insn_t)((VALUE) & (MASK)) << (SHIFT)))
 
 /* Extract bits MASK << SHIFT from STRUCT and shift them right
    SHIFT places.  */
