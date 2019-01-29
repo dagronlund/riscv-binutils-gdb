@@ -749,6 +749,8 @@ const struct riscv_opcode riscv_opcodes[] =
 {"vsh",       "V",   "t,Vs,Vm", MATCH_VSH, MASK_VSH | MASK_RD, match_opcode, 0 },
 {"vssh",      "V",   "d,Vs,t", MATCH_VSSH, MASK_VSSH | MASK_RS3, match_opcode, 0 },
 {"vssh",      "V",   "d,Vs,t,Vm", MATCH_VSSH, MASK_VSSH, match_opcode, 0 },
+{"vsxh",      "V",   "d,Vs,Vt", MATCH_VSXH, MASK_VSXH | MASK_RS3, match_opcode, 0 },
+{"vsxh",      "V",   "d,Vs,Vt,Vm", MATCH_VSXH, MASK_VSXH, match_opcode, 0 },
 
 {"vsetvl",    "V",   "d,s", MATCH_VSETVL, MASK_VSETVL | MASK_IMM, match_opcode, 0},
 {"vconfig",   "V",   "j",   MATCH_VCONFIG, MASK_VCONFIG | MASK_RD | MASK_RS1, match_opcode, 0},
