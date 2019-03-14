@@ -34,6 +34,7 @@
 #include "opcode/riscv.h"
 
 #include <stdint.h>
+#include <errno.h>
 
 /* Information about an instruction, including its format, operands
 	 and fixups.  */
@@ -484,6 +485,9 @@ static bfd_boolean validate_riscv_insn(const struct riscv_opcode *opc) {
 					USE_BITS(OP_MASK_RD, OP_SH_RD);
 					break;
 				case 't':
+					USE_BITS(OP_MASK_RS2, OP_SH_RS2);
+					break;
+				case 'j':
 					USE_BITS(OP_MASK_RS2, OP_SH_RS2);
 					break;
 				default:
@@ -1265,24 +1269,9 @@ static const char *riscv_ip(char *str, struct riscv_cl_insn *ip,
 					case 'd':
 						if (!reg_lookup(&s, RCLASS_VECR, &regno)) break;
 						INSERT_OPERAND(RD, *ip, regno);
-						unsigned int err = 0;
-						char prev = '\0';
-						for(unsigned int i = 0; i < 2; i++) {
-							if(*s != '.') break;
-							if(*(s + 1) == 'k' && prev != 'k') {
-								OR_BITS((*ip).insn_opcode, 0x20, OP_MASK_RD, OP_SH_RD);
-							} else if(*(s + 1) == 'm' && prev != 'm') {
-								INSERT_BITS((*ip).insn_opcode, 0x1, OP_MASK_VM, OP_SH_VM);
-							} else {
-								err = 1;
-								break;
-							}
-							prev = *(s + 1);
+						if(*s == '.' && *(s + 1) == 'm') {
 							s += 2;
-						}
-						if(err) {
-							as_bad(_("bad RVV register modifier'\n"));
-							break;
+							INSERT_BITS((*ip).insn_opcode, 0x1, OP_MASK_VM, OP_SH_VM);
 						}
 						continue;
 					case 't':
@@ -1291,6 +1280,21 @@ static const char *riscv_ip(char *str, struct riscv_cl_insn *ip,
 						if(*s == '.' && *(s + 1) == 'k') {
 							s += 2;
 							OR_BITS((*ip).insn_opcode, 0x20, OP_MASK_RS2, OP_SH_RS2);
+						}
+						continue;
+					case 'j': 
+						{
+							char *eptr;
+							char immc[4];
+							int i = 0;
+							while(*s != '\0') immc[i++] = *s++;
+							immc[i] = '\0';
+							int imm = strtol(immc, &eptr, 10);
+							if(imm == 0) {
+								if(errno == EINVAL || errno == ERANGE) break;
+							}
+							if(imm > 15 || imm < -16) break;
+							INSERT_BITS((*ip).insn_opcode, (imm & 0x1f), OP_MASK_RS2, OP_SH_RS2);
 						}
 						continue;
 					default:
