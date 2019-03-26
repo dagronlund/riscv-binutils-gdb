@@ -1263,7 +1263,7 @@ static const char *riscv_ip(char *str, struct riscv_cl_insn *ip,
 						INSERT_OPERAND(RS1, *ip, regno);
 						if(*s == '.' && *(s + 1) == 'k') {
 							s += 2;
-							OR_BITS((*ip).insn_opcode, 0x20, OP_MASK_RS1, OP_SH_RS2);
+							OR_BITS((*ip).insn_opcode, 0x10, OP_MASK_RS1, OP_SH_RS1);
 						}
 						continue;
 					case 'd':
@@ -1279,7 +1279,7 @@ static const char *riscv_ip(char *str, struct riscv_cl_insn *ip,
 						INSERT_OPERAND(RS2, *ip, regno);
 						if(*s == '.' && *(s + 1) == 'k') {
 							s += 2;
-							OR_BITS((*ip).insn_opcode, 0x20, OP_MASK_RS2, OP_SH_RS2);
+							OR_BITS((*ip).insn_opcode, 0x10, OP_MASK_RS2, OP_SH_RS2);
 						}
 						continue;
 					case 'j': 
