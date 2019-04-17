@@ -480,9 +480,6 @@ const struct riscv_opcode riscv_opcodes[] =
 {"fmv.x.w",   "F",   "d,S",  MATCH_FMV_X_S, MASK_FMV_X_S, match_opcode, 0 },
 {"fmv.w.x",   "F",   "D,s",  MATCH_FMV_S_X, MASK_FMV_S_X, match_opcode, 0 },
 
-{"fmv.x.s",   "F",   "d,S",  MATCH_FMV_X_S, MASK_FMV_X_S, match_opcode, 0 },
-{"fmv.s.x",   "F",   "D,s",  MATCH_FMV_S_X, MASK_FMV_S_X, match_opcode, 0 },
-
 {"fmv.s",     "F",   "D,U",  MATCH_FSGNJ_S, MASK_FSGNJ_S, match_rs1_eq_rs2, INSN_ALIAS },
 {"fneg.s",    "F",   "D,U",  MATCH_FSGNJN_S, MASK_FSGNJN_S, match_rs1_eq_rs2, INSN_ALIAS },
 {"fabs.s",    "F",   "D,U",  MATCH_FSGNJX_S, MASK_FSGNJX_S, match_rs1_eq_rs2, INSN_ALIAS },
@@ -723,12 +720,16 @@ const struct riscv_opcode riscv_opcodes[] =
 {"hret",      "I",   "",     MATCH_HRET, MASK_HRET, match_opcode, 0 },
 {"mret",      "I",   "",     MATCH_MRET, MASK_MRET, match_opcode, 0 },
 {"dret",      "I",   "",     MATCH_DRET, MASK_DRET, match_opcode, 0 },
-{"sfence.vm", "I",   "",     MATCH_SFENCE_VM, MASK_SFENCE_VM | MASK_RS1, match_opcode, 0 },
-{"sfence.vm", "I",   "s",    MATCH_SFENCE_VM, MASK_SFENCE_VM, match_opcode, 0 },
 {"sfence.vma","I",   "",     MATCH_SFENCE_VMA, MASK_SFENCE_VMA | MASK_RS1 | MASK_RS2, match_opcode, INSN_ALIAS },
 {"sfence.vma","I",   "s",    MATCH_SFENCE_VMA, MASK_SFENCE_VMA | MASK_RS2, match_opcode, INSN_ALIAS },
 {"sfence.vma","I",   "s,t",  MATCH_SFENCE_VMA, MASK_SFENCE_VMA, match_opcode, 0 },
 {"wfi",       "I",   "",     MATCH_WFI, MASK_WFI, match_opcode, 0 },
+
+/* Vector instructions added for 18500 Team A3 */
+{"vconfig",   "V",   "",     MATCH_VCONFIG, MASK_VCONFIG, match_opcode, 0 },
+
+
+
 
 /* Terminate the list.  */
 {0, 0, 0, 0, 0, 0, 0}
