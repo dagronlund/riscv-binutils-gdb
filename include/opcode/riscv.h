@@ -1,5 +1,5 @@
 /* riscv.h.  RISC-V opcode list for GDB, the GNU debugger.
-   Copyright (C) 2011-2018 Free Software Foundation, Inc.
+   Copyright (C) 2011-2017 Free Software Foundation, Inc.
    Contributed by Andrew Waterman
 
    This file is part of GDB, GAS, and the GNU binutils.
@@ -29,6 +29,8 @@ typedef uint64_t insn_t;
 
 static inline unsigned int riscv_insn_length (insn_t insn)
 {
+  if ((insn & 0x7) == 0x07) /* RVV */
+    return 4;
   if ((insn & 0x3) != 0x3) /* RVC.  */
     return 2;
   if ((insn & 0x1f) != 0x1f) /* Base ISA and extensions in 32-bit space.  */
@@ -193,35 +195,37 @@ static const char * const riscv_pred_succ[16] =
 
 /* RV fields.  */
 
-#define OP_MASK_OP		0x7f
-#define OP_SH_OP		0
-#define OP_MASK_RS2		0x1f
-#define OP_SH_RS2		20
-#define OP_MASK_RS1		0x1f
-#define OP_SH_RS1		15
-#define OP_MASK_RS3		0x1f
-#define OP_SH_RS3		27
-#define OP_MASK_RD		0x1f
-#define OP_SH_RD		7
-#define OP_MASK_SHAMT		0x3f
-#define OP_SH_SHAMT		20
-#define OP_MASK_SHAMTW		0x1f
-#define OP_SH_SHAMTW		20
-#define OP_MASK_RM		0x7
-#define OP_SH_RM		12
-#define OP_MASK_PRED		0xf
-#define OP_SH_PRED		24
-#define OP_MASK_SUCC		0xf
-#define OP_SH_SUCC		20
-#define OP_MASK_AQ		0x1
-#define OP_SH_AQ		26
-#define OP_MASK_RL		0x1
-#define OP_SH_RL		25
+#define OP_MASK_OP    0x7f
+#define OP_SH_OP    0
+#define OP_MASK_RS2   0x1f
+#define OP_SH_RS2   20
+#define OP_MASK_RS1   0x1f
+#define OP_SH_RS1   15
+#define OP_MASK_RS3   0x1f
+#define OP_SH_RS3   27
+#define OP_MASK_RD    0x1f
+#define OP_SH_RD    7
+#define OP_MASK_SHAMT   0x3f
+#define OP_SH_SHAMT   20
+#define OP_MASK_SHAMTW    0x1f
+#define OP_SH_SHAMTW    20
+#define OP_MASK_RM    0x7
+#define OP_SH_RM    12
+#define OP_MASK_PRED    0xf
+#define OP_SH_PRED    24
+#define OP_MASK_SUCC    0xf
+#define OP_SH_SUCC    20
+#define OP_MASK_AQ    0x1
+#define OP_SH_AQ    26
+#define OP_MASK_RL    0x1
+#define OP_SH_RL    25
+#define OP_MASK_VM 0x1
+#define OP_SH_VM 25
 
-#define OP_MASK_CUSTOM_IMM	0x7f
-#define OP_SH_CUSTOM_IMM	25
-#define OP_MASK_CSR		0xfff
-#define OP_SH_CSR		20
+#define OP_MASK_CUSTOM_IMM  0x7f
+#define OP_SH_CUSTOM_IMM  25
+#define OP_MASK_CSR   0xfff
+#define OP_SH_CSR   20
 
 /* RVC fields.  */
 
@@ -231,6 +235,10 @@ static const char * const riscv_pred_succ[16] =
 #define OP_SH_CRS1S 7
 #define OP_MASK_CRS2S 0x7
 #define OP_SH_CRS2S 2
+
+/* RVV fields. */
+#define OP_MASK_VP 0x1
+#define OP_SH_VP 0x12
 
 /* ABI names for selected x-registers.  */
 
@@ -245,12 +253,16 @@ static const char * const riscv_pred_succ[16] =
 
 #define NGPR 32
 #define NFPR 32
+#define NVECR 32
 
 /* Replace bits MASK << SHIFT of STRUCT with the equivalent bits in
    VALUE << SHIFT.  VALUE is evaluated exactly once.  */
 #define INSERT_BITS(STRUCT, VALUE, MASK, SHIFT) \
   (STRUCT) = (((STRUCT) & ~((insn_t)(MASK) << (SHIFT))) \
-	      | ((insn_t)((VALUE) & (MASK)) << (SHIFT)))
+        | ((insn_t)((VALUE) & (MASK)) << (SHIFT)))
+
+#define OR_BITS(STRUCT, VALUE, MASK, SHIFT) \
+  (STRUCT) = ((STRUCT) | ((insn_t)((VALUE) & (MASK)) << (SHIFT)))
 
 /* Extract bits MASK << SHIFT from STRUCT and shift them right
    SHIFT places.  */
@@ -291,10 +303,10 @@ struct riscv_opcode
 };
 
 /* Instruction is a simple alias (e.g. "mv" for "addi").  */
-#define	INSN_ALIAS		0x00000001
+#define INSN_ALIAS    0x00000001
 /* Instruction is actually a macro.  It should be ignored by the
    disassembler, and requires special treatment by the assembler.  */
-#define INSN_MACRO		0xffffffff
+#define INSN_MACRO    0xffffffff
 
 /* This is a list of macro expanded instructions.
 
@@ -338,6 +350,7 @@ extern const char * const riscv_gpr_names_numeric[NGPR];
 extern const char * const riscv_gpr_names_abi[NGPR];
 extern const char * const riscv_fpr_names_numeric[NFPR];
 extern const char * const riscv_fpr_names_abi[NFPR];
+extern const char * const riscv_vecr_names_numeric[NFPR];
 
 extern const struct riscv_opcode riscv_opcodes[];
 

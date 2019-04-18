@@ -56,6 +56,14 @@ const char * const riscv_fpr_names_abi[NFPR] = {
   "fs8", "fs9", "fs10", "fs11", "ft8", "ft9", "ft10", "ft11"
 };
 
+const char * const riscv_vecr_names_numeric[NFPR] =
+{
+  "v0",   "v1",   "v2",   "v3",   "v4",   "v5",   "v6",   "v7",
+  "v8",   "v9",   "v10",  "v11",  "v12",  "v13",  "v14",  "v15",
+  "v16",  "v17",  "v18",  "v19",  "v20",  "v21",  "v22",  "v23",
+  "v24",  "v25",  "v26",  "v27",  "v28",  "v29",  "v30",  "v31"
+};
+
 /* The order of overloaded instructions matters.  Label arguments and
    register arguments look the same. Instructions that can have either
    for arguments must apear in the correct order in this table for the
@@ -68,6 +76,7 @@ const char * const riscv_fpr_names_abi[NFPR] = {
 
 #define MASK_RS1 (OP_MASK_RS1 << OP_SH_RS1)
 #define MASK_RS2 (OP_MASK_RS2 << OP_SH_RS2)
+#define MASK_RS3 (uint32_t)(OP_MASK_RS3 << OP_SH_RS3)
 #define MASK_RD (OP_MASK_RD << OP_SH_RD)
 #define MASK_CRS2 (OP_MASK_CRS2 << OP_SH_CRS2)
 #define MASK_IMM ENCODE_ITYPE_IMM (-1U)
@@ -726,9 +735,8 @@ const struct riscv_opcode riscv_opcodes[] =
 {"wfi",       "I",   "",     MATCH_WFI, MASK_WFI, match_opcode, 0 },
 
 /* Vector instructions added for 18500 Team A3 */
-{"vconfig",   "V",   "",     MATCH_VCONFIG, MASK_VCONFIG, match_opcode, 0 },
-
-
+{"vsetvl",    "V",   "d,s", MATCH_VSETVL, MASK_VSETVL | MASK_IMM, match_opcode, 0},
+{"vfence",    "V",   "", MATCH_VFENCE, MASK_VFENCE, match_opcode, 0},
 
 
 /* Terminate the list.  */
