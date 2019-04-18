@@ -153,103 +153,90 @@ riscv_add_subset (const char *subset)
 
 /* Set which ISA and extensions are available.  */
 
-static void
-riscv_set_arch (const char *s)
-{
-  const char *all_subsets = "imafdqc";
+static void riscv_set_arch(const char *s) {
+  const char *all_subsets = "imafdqcv";
   char *extension = NULL;
   const char *p = s;
 
   riscv_clear_subsets();
 
-  if (strncmp (p, "rv32", 4) == 0)
-    {
-      xlen = 32;
-      p += 4;
+  if (strncmp(p, "rv32", 4) == 0) {
+    xlen = 32;
+    p += 4;
+  } else if (strncmp(p, "rv64", 4) == 0) {
+    xlen = 64;
+    p += 4;
+  } else
+    as_fatal("-march=%s: ISA string must begin with rv32 or rv64", s);
+
+  switch (*p) {
+  case 'i':
+    break;
+
+  case 'e':
+    p++;
+    riscv_add_subset("e");
+    riscv_add_subset("i");
+    riscv_set_rve(TRUE);
+
+    if (xlen > 32)
+      as_fatal("-march=%s: rv%de is not a valid base ISA", s, xlen);
+
+    break;
+
+  case 'g':
+    p++;
+    for (; *all_subsets != 'q'; all_subsets++) {
+      const char subset[] = {*all_subsets, '\0'};
+      riscv_add_subset(subset);
     }
-  else if (strncmp (p, "rv64", 4) == 0)
-    {
-      xlen = 64;
-      p += 4;
-    }
-  else
-    as_fatal ("-march=%s: ISA string must begin with rv32 or rv64", s);
+    break;
 
-  switch (*p)
-    {
-      case 'i':
-	break;
+  default:
+    as_fatal("-march=%s: first ISA subset must be `e', `i' or `g'", s);
+  }
 
-      case 'e':
-	p++;
-	riscv_add_subset ("e");
-	riscv_add_subset ("i");
-	riscv_set_rve (TRUE);
+  while (*p) {
+    if (*p == 'x') {
+      char *subset = xstrdup(p);
+      char *q = subset;
 
-	if (xlen > 32)
-	  as_fatal ("-march=%s: rv%de is not a valid base ISA", s, xlen);
+      while (*++q != '\0' && *q != '_')
+        ;
+      *q = '\0';
 
-	break;
+      if (extension)
+        as_fatal("-march=%s: only one non-standard extension is supported"
+                 " (found `%s' and `%s')",
+                 s, extension, subset);
+      extension = subset;
+      riscv_add_subset(subset);
+      p += strlen(subset);
+    } else if (*p == '_')
+      p++;
+    else if ((all_subsets = strchr(all_subsets, *p)) != NULL) {
+      const char subset[] = {*p, 0};
+      riscv_add_subset(subset);
+      all_subsets++;
+      p++;
+    } else
+      as_fatal("-march=%s: unsupported ISA subset `%c'", s, *p);
+  }
 
-      case 'g':
-	p++;
-	for ( ; *all_subsets != 'q'; all_subsets++)
-	  {
-	    const char subset[] = {*all_subsets, '\0'};
-	    riscv_add_subset (subset);
-	  }
-	break;
+  if (riscv_subset_supports("e") && riscv_subset_supports("f"))
+    as_fatal("-march=%s: rv32e does not support the `f' extension", s);
 
-      default:
-	as_fatal ("-march=%s: first ISA subset must be `e', `i' or `g'", s);
-    }
+  if (riscv_subset_supports("d") && !riscv_subset_supports("f"))
+    as_fatal("-march=%s: `d' extension requires `f' extension", s);
 
-  while (*p)
-    {
-      if (*p == 'x')
-	{
-	  char *subset = xstrdup (p);
-	  char *q = subset;
+  if (riscv_subset_supports("q") && !riscv_subset_supports("d"))
+    as_fatal("-march=%s: `q' extension requires `d' extension", s);
 
-	  while (*++q != '\0' && *q != '_')
-	    ;
-	  *q = '\0';
+  if (riscv_subset_supports("q") && xlen < 64)
+    as_fatal("-march=%s: rv32 does not support the `q' extension", s);
 
-	  if (extension)
-	    as_fatal ("-march=%s: only one non-standard extension is supported"
-		      " (found `%s' and `%s')", s, extension, subset);
-	  extension = subset;
-	  riscv_add_subset (subset);
-	  p += strlen (subset);
-	}
-      else if (*p == '_')
-	p++;
-      else if ((all_subsets = strchr (all_subsets, *p)) != NULL)
-	{
-	  const char subset[] = {*p, 0};
-	  riscv_add_subset (subset);
-	  all_subsets++;
-	  p++;
-	}
-      else
-	as_fatal ("-march=%s: unsupported ISA subset `%c'", s, *p);
-    }
-
-  if (riscv_subset_supports ("e") && riscv_subset_supports ("f"))
-    as_fatal ("-march=%s: rv32e does not support the `f' extension", s);
-
-  if (riscv_subset_supports ("d") && !riscv_subset_supports ("f"))
-    as_fatal ("-march=%s: `d' extension requires `f' extension", s);
-
-  if (riscv_subset_supports ("q") && !riscv_subset_supports ("d"))
-    as_fatal ("-march=%s: `q' extension requires `d' extension", s);
-
-  if (riscv_subset_supports ("q") && xlen < 64)
-    as_fatal ("-march=%s: rv32 does not support the `q' extension", s);
-
-  free (extension);
+  free(extension);
 }
-
 /* Handle of the OPCODE hash table.  */
 static struct hash_control *op_hash = NULL;
 
@@ -434,6 +421,7 @@ enum reg_class
   RCLASS_GPR,
   RCLASS_FPR,
   RCLASS_CSR,
+  RCLASS_VECR,
   RCLASS_MAX
 };
 
