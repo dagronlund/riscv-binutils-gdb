@@ -76,8 +76,8 @@ case "${target}" in
    msp430*-*-*)
        SIM_ARCH(msp430)
        ;;
-   or1k-*-* | or1knd-*-*)
-       SIM_ARCH(or1k)
+   riscv*-*-*)
+       SIM_ARCH(riscv)
        ;;
    rl78-*-*)
        SIM_ARCH(rl78)
