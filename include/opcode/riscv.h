@@ -193,6 +193,9 @@ static const char * const riscv_pred_succ[16] =
 #define RISCV_BRANCH_ALIGN (1 << RISCV_BRANCH_ALIGN_BITS)
 #define RISCV_BRANCH_REACH (RISCV_IMM_REACH * RISCV_BRANCH_ALIGN)
 
+#define RISCV_VZIMM_BITS 11
+#define RISCV_VZIMM_REACH (1LL << RISCV_VZIMM_BITS)
+
 /* RV fields.  */
 
 #define OP_MASK_OP    0x7f
@@ -239,6 +242,9 @@ static const char * const riscv_pred_succ[16] =
 /* RVV fields. */
 #define OP_MASK_VP 0x1
 #define OP_SH_VP 0x12
+
+#define OP_MASK_VZIMM  0x7ff
+#define OP_SH_VZIMM  20
 
 /* ABI names for selected x-registers.  */
 

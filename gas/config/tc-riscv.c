@@ -547,6 +547,9 @@ validate_riscv_insn (const struct riscv_opcode *opc)
         case 'j':
           USE_BITS(OP_MASK_RS2, OP_SH_RS2);
           break;
+        case 'z':
+          USE_BITS(OP_MASK_VZIMM, OP_SH_VZIMM);
+          break;
         default:
         as_bad(_("internal: bad RISC-V opcode (unknown operand type `C%c'): %s "
            "%s"), c, opc->name, opc->args);
@@ -1406,26 +1409,14 @@ static const char *riscv_ip(char *str, struct riscv_cl_insn *ip,
           case 's':
             if (!reg_lookup(&s, RCLASS_VECR, &regno)) break;
             INSERT_OPERAND(RS1, *ip, regno);
-            if(*s == '.' && *(s + 1) == 'k') {
-              s += 2;
-              OR_BITS((*ip).insn_opcode, 0x10, OP_MASK_RS1, OP_SH_RS1);
-            }
             continue;
           case 'd':
             if (!reg_lookup(&s, RCLASS_VECR, &regno)) break;
             INSERT_OPERAND(RD, *ip, regno);
-            if(*s == '.' && *(s + 1) == 'm') {
-              s += 2;
-              INSERT_BITS((*ip).insn_opcode, 0x1, OP_MASK_VM, OP_SH_VM);
-            }
             continue;
           case 't':
             if (!reg_lookup(&s, RCLASS_VECR, &regno)) break;
             INSERT_OPERAND(RS2, *ip, regno);
-            if(*s == '.' && *(s + 1) == 'k') {
-              s += 2;
-              OR_BITS((*ip).insn_opcode, 0x10, OP_MASK_RS2, OP_SH_RS2);
-            }
             continue;
           case 'j': 
             {
@@ -1441,6 +1432,21 @@ static const char *riscv_ip(char *str, struct riscv_cl_insn *ip,
               if(imm > 15 || imm < -16) break;
               INSERT_BITS((*ip).insn_opcode, (imm & 0x1f), OP_MASK_RS2, OP_SH_RS2);
             }
+            continue;
+          case 'z': /* vsetvli immediate.  */
+
+            //TODO
+            as_bad("vZIMM immediate not implemented (agotsis)");
+
+            //FIXME: This is not complete...
+            my_getExpression(imm_expr, s);
+            check_absolute_expr(ip, imm_expr);
+            if ((unsigned long)imm_expr->X_add_number > 31)
+              as_bad(_("Improper vZIMM immediate (%lu) (agotsis"),
+                     (unsigned long)imm_expr->X_add_number);
+            INSERT_OPERAND(RS1, *ip, imm_expr->X_add_number);
+            imm_expr->X_op = O_absent;
+            s = expr_end;
             continue;
           default:
             as_bad(_("bad RVV field specifier 'V%c'\n"), *args);
