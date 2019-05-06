@@ -737,91 +737,177 @@ const struct riscv_opcode riscv_opcodes[] =
 {"sfence.vma","I",   "s,t",  MATCH_SFENCE_VMA, MASK_SFENCE_VMA, match_opcode, 0 },
 {"wfi",       "I",   "",     MATCH_WFI, MASK_WFI, match_opcode, 0 },
 
+// /* Vector instructions added for 18500 Team A3 */
+// {"vsetvl",    "V",   "d,s,t", MATCH_VSETVL, MASK_VSETVL, match_opcode, 0},
+// {"vmv.v",     "V",   "Vd,Vs,Vt", MATCH_VMV_V, MASK_VMV_V, match_opcode, 0 },
+
+// {"vfmv.f.s",  "V",   "D,Vs,Vt", MATCH_VFMV_F_S, MASK_VFMV_F_S, match_opcode, 0},
+// {"vfmv.s.f",  "V",   "D,Vs,Vt", MATCH_VFMV_S_F, MASK_VFMV_S_F, match_opcode, 0},
+
+// // {"vlb",       "V",   "Vd,o(s)", MATCH_VLB, MATCH_VLB, match_opcode, 0},
+// // {"vlh",       "V",   "Vd,o(s)", MATCH_VLH, MATCH_VLH, match_opcode, 0},
+// // {"vlw",       "V",   "Vd,o(s)", MATCH_VLW, MATCH_VLW, match_opcode, 0},
+// // {"vlbu",      "V",   "Vd,o(s)", MATCH_VLBU, MATCH_VLBU, match_opcode, 0},
+// // {"vlhu",      "V",   "Vd,o(s)", MATCH_VLHU, MATCH_VLHU, match_opcode, 0},
+// // {"vlwu",      "V",   "Vd,o(s)", MATCH_VLWU, MATCH_VLWU, match_opcode, 0},
+// // {"vle",       "V",   "Vd,o(s)", MATCH_VLE, MATCH_VLE, match_opcode, 0},
+
+// // {"vsb",       "V",   "Vt,q(s)", MATCH_VSB, MATCH_VSB, match_opcode, 0},
+// // {"vsh",       "V",   "Vt,q(s)", MATCH_VSH, MATCH_VSH, match_opcode, 0},
+// // {"vsw",       "V",   "Vt,q(s)", MATCH_VSW, MATCH_VSW, match_opcode, 0},
+// // {"vse",       "V",   "Vt,q(s)", MATCH_VSE, MATCH_VSE, match_opcode, 0},
+
+// {"vfadd.vv",  "V",   "Vd,Vs,Vt", MATCH_VFADD_VV, MASK_VFADD_VV, match_opcode, 0},
+// {"vfadd.vf",  "V",   "Vd,S,Vt",  MATCH_VFADD_VF, MASK_VFADD_VF, match_opcode, 0},
+// {"vfsub.vv",  "V",   "Vd,Vs,Vt", MATCH_VFSUB_VV, MASK_VFSUB_VV, match_opcode, 0},
+// {"vfsub.vf",  "V",   "Vd,S,Vt",  MATCH_VFSUB_VF, MASK_VFSUB_VF, match_opcode, 0},
+
+// {"vfwadd.vv", "V",   "Vd,Vs,Vt", MATCH_VFWADD_VV, MASK_VFWADD_VV, match_opcode, 0},
+// {"vfwadd.vf", "V",   "Vd,S,Vt",  MATCH_VFWADD_VF, MASK_VFWADD_VF, match_opcode, 0},
+// {"vfwsub.vv", "V",   "Vd,Vs,Vt", MATCH_VFWSUB_VV, MASK_VFWSUB_VV, match_opcode, 0},
+// {"vfwsub.vf", "V",   "Vd,S,Vt",  MATCH_VFWSUB_VF, MASK_VFWSUB_VF, match_opcode, 0},
+
+// {"vfwadd.wv", "V",   "Vd,Vs,Vt", MATCH_VFWADD_WV, MASK_VFWADD_WV, match_opcode, 0},
+// {"vfwadd.wf", "V",   "Vd,S,Vt",  MATCH_VFWADD_WF, MASK_VFWADD_WF, match_opcode, 0},
+// {"vfwsub.wv", "V",   "Vd,Vs,Vt", MATCH_VFWSUB_WV, MASK_VFWSUB_WV, match_opcode, 0},
+// {"vfwsub.wf", "V",   "Vd,S,Vt",  MATCH_VFWSUB_WF, MASK_VFWSUB_WF, match_opcode, 0},
+
+// {"vfmul.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMUL_VV, MASK_VFMUL_VV, match_opcode, 0},
+// {"vfmul.vf",  "V",   "Vd,S,Vt",  MATCH_VFMUL_VF, MASK_VFMUL_VF, match_opcode, 0},
+// {"vfdiv.vv",  "V",   "Vd,Vs,Vt", MATCH_VFDIV_VV, MASK_VFDIV_VV, match_opcode, 0},
+// {"vfdiv.vf",  "V",   "Vd,S,Vt",  MATCH_VFDIV_VF, MASK_VFDIV_VF, match_opcode, 0},
+
+// {"vfrdiv.vf",  "V",   "Vd,S,Vt",  MATCH_VFRDIV_VF, MASK_VFRDIV_VF, match_opcode, 0},
+
+// {"vfmacc.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMACC_VV, MASK_VFMACC_VV, match_opcode, 0},
+// {"vfmacc.vf",  "V",   "Vd,S,Vt",  MATCH_VFMACC_VF, MASK_VFMACC_VF, match_opcode, 0},
+
+// {"vfnmacc.vv", "V",   "Vd,Vs,Vt", MATCH_VFNMACC_VV, MASK_VFNMACC_VV, match_opcode, 0},
+// {"vfnmacc.vf", "V",   "Vd,S,Vt",  MATCH_VFNMACC_VF, MASK_VFNMACC_VF, match_opcode, 0},
+
+// {"vfmsac.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMSAC_VV, MASK_VFMSAC_VV, match_opcode, 0},
+// {"vfmsac.vf",  "V",   "Vd,S,Vt",  MATCH_VFMSAC_VF, MASK_VFMSAC_VF, match_opcode, 0},
+
+// {"vfnmsac.vv", "V",   "Vd,Vs,Vt", MATCH_VFNMSAC_VV, MASK_VFNMSAC_VV, match_opcode, 0},
+// {"vfnmsac.vf", "V",   "Vd,S,Vt",  MATCH_VFNMSAC_VF, MASK_VFNMSAC_VF, match_opcode, 0},
+
+// {"vfmadd.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMADD_VV, MASK_VFMADD_VV, match_opcode, 0},
+// {"vfmadd.vf",  "V",   "Vd,S,Vt",  MATCH_VFMADD_VF, MASK_VFMADD_VF, match_opcode, 0},
+
+// {"vfnmadd.vv", "V",   "Vd,Vs,Vt", MATCH_VFNMADD_VV, MASK_VFNMADD_VV, match_opcode, 0},
+// {"vfnmadd.vf", "V",   "Vd,S,Vt",  MATCH_VFNMADD_VF, MASK_VFNMADD_VF, match_opcode, 0},
+
+// {"vfmsub.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMSUB_VV, MASK_VFMSUB_VV, match_opcode, 0},
+// {"vfmsub.vf",  "V",   "Vd,S,Vt",  MATCH_VFMSUB_VF, MASK_VFMSUB_VF, match_opcode, 0},
+
+// {"vfnmsub.vv", "V",   "Vd,Vs,Vt", MATCH_VFNMSUB_VV, MASK_VFNMSUB_VV, match_opcode, 0},
+// {"vfnmsub.vf", "V",   "Vd,S,Vt",  MATCH_VFNMSUB_VF, MASK_VFNMSUB_VF, match_opcode, 0},
+
+// {"vfsqrt.v",   "V",   "Vd,Vt", MATCH_VFSQRT_V, MASK_VFSQRT_V, match_opcode, 0},
+
+// {"vfmin.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMIN_VV, MASK_VFMIN_VV, match_opcode, 0},
+// {"vfmin.vf",  "V",   "Vd,S,Vt",  MATCH_VFMIN_VF, MASK_VFMIN_VF, match_opcode, 0},
+
+// {"vfmax.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMAX_VV, MASK_VFMAX_VV, match_opcode, 0},
+// {"vfmax.vf",  "V",   "Vd,S,Vt",  MATCH_VFMAX_VF, MASK_VFMAX_VF, match_opcode, 0},
+
+// {"vfdgnj.vv", "V",   "Vd,Vs,Vt", MATCH_VFSGNJ_VV, MASK_VFSGNJ_VV, match_opcode, 0},
+// {"vfdgnj.vf", "V",   "Vd,S,Vt",  MATCH_VFSGNJ_VF, MASK_VFSGNJ_VF, match_opcode, 0},
+
+// // {"vfdgnjn.vv", "V",   "Vd,Vs,Vt", MATCH_VFSGNJN_VV, MASK_VFSGNJN_VV, match_opcode, 0},
+// // {"vfdgnjn.vf", "V",   "Vd,S,Vt",  MATCH_VFSGNJN_VF, MASK_VFSGNJN_VF, match_opcode, 0},
+
+// // {"vfdgnjx.vv", "V",   "Vd,Vs,Vt", MATCH_VFSGNJX_VV, MASK_VFSGNJX_VV, match_opcode, 0},
+// // {"vfdgnjx.vf", "V",   "Vd,S,Vt",  MATCH_VFSGNJX_VF, MASK_VFSGNJX_VF, match_opcode, 0},
+
+// {"vslideup.vi", "V",   "Vd,Vt",  MATCH_VSLIDEUP_VI,   MASK_VSLIDEUP_VI,   match_opcode, 0},
+// {"vslidedown.vi", "V", "Vd,Vt",  MATCH_VSLIDEDOWN_VI, MASK_VSLIDEDOWN_VI, match_opcode, 0},
+
 /* Vector instructions added for 18500 Team A3 */
 {"vsetvl",    "V",   "d,s,t", MATCH_VSETVL, MASK_VSETVL, match_opcode, 0},
-{"vmv.v",     "V",   "Vd,Vs,Vt", MATCH_VMV_V, MASK_VMV_V, match_opcode, 0 },
+{"vmv.v",     "V",   "D,S,T", MATCH_VMV_V, MASK_VMV_V, match_opcode, 0 },
 
-{"vfmv.f.s",  "V",   "D,Vs,Vt", MATCH_VFMV_F_S, MASK_VFMV_F_S, match_opcode, 0},
-{"vfmv.s.f",  "V",   "D,Vs,Vt", MATCH_VFMV_S_F, MASK_VFMV_S_F, match_opcode, 0},
+{"vfmv.f.s",  "V",   "D,S,T", MATCH_VFMV_F_S, MASK_VFMV_F_S, match_opcode, 0},
+{"vfmv.s.f",  "V",   "D,S,T", MATCH_VFMV_S_F, MASK_VFMV_S_F, match_opcode, 0},
 
-// {"vlb",       "V",   "Vd,o(s)", MATCH_VLB, MATCH_VLB, match_opcode, 0},
-// {"vlh",       "V",   "Vd,o(s)", MATCH_VLH, MATCH_VLH, match_opcode, 0},
-// {"vlw",       "V",   "Vd,o(s)", MATCH_VLW, MATCH_VLW, match_opcode, 0},
-// {"vlbu",      "V",   "Vd,o(s)", MATCH_VLBU, MATCH_VLBU, match_opcode, 0},
-// {"vlhu",      "V",   "Vd,o(s)", MATCH_VLHU, MATCH_VLHU, match_opcode, 0},
-// {"vlwu",      "V",   "Vd,o(s)", MATCH_VLWU, MATCH_VLWU, match_opcode, 0},
-// {"vle",       "V",   "Vd,o(s)", MATCH_VLE, MATCH_VLE, match_opcode, 0},
+// {"vlb",       "V",   "D,o(s)", MATCH_VLB, MATCH_VLB, match_opcode, 0},
+// {"vlh",       "V",   "D,o(s)", MATCH_VLH, MATCH_VLH, match_opcode, 0},
+// {"vlw",       "V",   "D,o(s)", MATCH_VLW, MATCH_VLW, match_opcode, 0},
+// {"vlbu",      "V",   "D,o(s)", MATCH_VLBU, MATCH_VLBU, match_opcode, 0},
+// {"vlhu",      "V",   "D,o(s)", MATCH_VLHU, MATCH_VLHU, match_opcode, 0},
+// {"vlwu",      "V",   "D,o(s)", MATCH_VLWU, MATCH_VLWU, match_opcode, 0},
+// {"vle",       "V",   "D,o(s)", MATCH_VLE, MATCH_VLE, match_opcode, 0},
 
-// {"vsb",       "V",   "Vt,q(s)", MATCH_VSB, MATCH_VSB, match_opcode, 0},
-// {"vsh",       "V",   "Vt,q(s)", MATCH_VSH, MATCH_VSH, match_opcode, 0},
-// {"vsw",       "V",   "Vt,q(s)", MATCH_VSW, MATCH_VSW, match_opcode, 0},
-// {"vse",       "V",   "Vt,q(s)", MATCH_VSE, MATCH_VSE, match_opcode, 0},
+// {"vsb",       "V",   "T,q(s)", MATCH_VSB, MATCH_VSB, match_opcode, 0},
+// {"vsh",       "V",   "T,q(s)", MATCH_VSH, MATCH_VSH, match_opcode, 0},
+// {"vsw",       "V",   "T,q(s)", MATCH_VSW, MATCH_VSW, match_opcode, 0},
+// {"vse",       "V",   "T,q(s)", MATCH_VSE, MATCH_VSE, match_opcode, 0},
 
-{"vfadd.vv",  "V",   "Vd,Vs,Vt", MATCH_VFADD_VV, MASK_VFADD_VV, match_opcode, 0},
-{"vfadd.vf",  "V",   "Vd,S,Vt",  MATCH_VFADD_VF, MASK_VFADD_VF, match_opcode, 0},
-{"vfsub.vv",  "V",   "Vd,Vs,Vt", MATCH_VFSUB_VV, MASK_VFSUB_VV, match_opcode, 0},
-{"vfsub.vf",  "V",   "Vd,S,Vt",  MATCH_VFSUB_VF, MASK_VFSUB_VF, match_opcode, 0},
+{"vfadd.vv",  "V",   "D,S,T", MATCH_VFADD_VV, MASK_VFADD_VV, match_opcode, 0},
+{"vfadd.vf",  "V",   "D,S,T",  MATCH_VFADD_VF, MASK_VFADD_VF, match_opcode, 0},
+{"vfsub.vv",  "V",   "D,S,T", MATCH_VFSUB_VV, MASK_VFSUB_VV, match_opcode, 0},
+{"vfsub.vf",  "V",   "D,S,T",  MATCH_VFSUB_VF, MASK_VFSUB_VF, match_opcode, 0},
 
-{"vfwadd.vv", "V",   "Vd,Vs,Vt", MATCH_VFWADD_VV, MASK_VFWADD_VV, match_opcode, 0},
-{"vfwadd.vf", "V",   "Vd,S,Vt",  MATCH_VFWADD_VF, MASK_VFWADD_VF, match_opcode, 0},
-{"vfwsub.vv", "V",   "Vd,Vs,Vt", MATCH_VFWSUB_VV, MASK_VFWSUB_VV, match_opcode, 0},
-{"vfwsub.vf", "V",   "Vd,S,Vt",  MATCH_VFWSUB_VF, MASK_VFWSUB_VF, match_opcode, 0},
+{"vfwadd.vv", "V",   "D,S,T", MATCH_VFWADD_VV, MASK_VFWADD_VV, match_opcode, 0},
+{"vfwadd.vf", "V",   "D,S,T",  MATCH_VFWADD_VF, MASK_VFWADD_VF, match_opcode, 0},
+{"vfwsub.vv", "V",   "D,S,T", MATCH_VFWSUB_VV, MASK_VFWSUB_VV, match_opcode, 0},
+{"vfwsub.vf", "V",   "D,S,T",  MATCH_VFWSUB_VF, MASK_VFWSUB_VF, match_opcode, 0},
 
-{"vfwadd.wv", "V",   "Vd,Vs,Vt", MATCH_VFWADD_WV, MASK_VFWADD_WV, match_opcode, 0},
-{"vfwadd.wf", "V",   "Vd,S,Vt",  MATCH_VFWADD_WF, MASK_VFWADD_WF, match_opcode, 0},
-{"vfwsub.wv", "V",   "Vd,Vs,Vt", MATCH_VFWSUB_WV, MASK_VFWSUB_WV, match_opcode, 0},
-{"vfwsub.wf", "V",   "Vd,S,Vt",  MATCH_VFWSUB_WF, MASK_VFWSUB_WF, match_opcode, 0},
+{"vfwadd.wv", "V",   "D,S,T", MATCH_VFWADD_WV, MASK_VFWADD_WV, match_opcode, 0},
+{"vfwadd.wf", "V",   "D,S,T",  MATCH_VFWADD_WF, MASK_VFWADD_WF, match_opcode, 0},
+{"vfwsub.wv", "V",   "D,S,T", MATCH_VFWSUB_WV, MASK_VFWSUB_WV, match_opcode, 0},
+{"vfwsub.wf", "V",   "D,S,T",  MATCH_VFWSUB_WF, MASK_VFWSUB_WF, match_opcode, 0},
 
-{"vfmul.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMUL_VV, MASK_VFMUL_VV, match_opcode, 0},
-{"vfmul.vf",  "V",   "Vd,S,Vt",  MATCH_VFMUL_VF, MASK_VFMUL_VF, match_opcode, 0},
-{"vfdiv.vv",  "V",   "Vd,Vs,Vt", MATCH_VFDIV_VV, MASK_VFDIV_VV, match_opcode, 0},
-{"vfdiv.vf",  "V",   "Vd,S,Vt",  MATCH_VFDIV_VF, MASK_VFDIV_VF, match_opcode, 0},
+{"vfmul.vv",  "V",   "D,S,T", MATCH_VFMUL_VV, MASK_VFMUL_VV, match_opcode, 0},
+{"vfmul.vf",  "V",   "D,S,T",  MATCH_VFMUL_VF, MASK_VFMUL_VF, match_opcode, 0},
+{"vfdiv.vv",  "V",   "D,S,T", MATCH_VFDIV_VV, MASK_VFDIV_VV, match_opcode, 0},
+{"vfdiv.vf",  "V",   "D,S,T",  MATCH_VFDIV_VF, MASK_VFDIV_VF, match_opcode, 0},
 
-{"vfrdiv.vf",  "V",   "Vd,S,Vt",  MATCH_VFRDIV_VF, MASK_VFRDIV_VF, match_opcode, 0},
+{"vfrdiv.vf",  "V",   "D,S,T",  MATCH_VFRDIV_VF, MASK_VFRDIV_VF, match_opcode, 0},
 
-{"vfmacc.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMACC_VV, MASK_VFMACC_VV, match_opcode, 0},
-{"vfmacc.vf",  "V",   "Vd,S,Vt",  MATCH_VFMACC_VF, MASK_VFMACC_VF, match_opcode, 0},
+{"vfmacc.vv",  "V",   "D,S,T", MATCH_VFMACC_VV, MASK_VFMACC_VV, match_opcode, 0},
+{"vfmacc.vf",  "V",   "D,S,T",  MATCH_VFMACC_VF, MASK_VFMACC_VF, match_opcode, 0},
 
-{"vfnmacc.vv", "V",   "Vd,Vs,Vt", MATCH_VFNMACC_VV, MASK_VFNMACC_VV, match_opcode, 0},
-{"vfnmacc.vf", "V",   "Vd,S,Vt",  MATCH_VFNMACC_VF, MASK_VFNMACC_VF, match_opcode, 0},
+{"vfnmacc.vv", "V",   "D,S,T", MATCH_VFNMACC_VV, MASK_VFNMACC_VV, match_opcode, 0},
+{"vfnmacc.vf", "V",   "D,S,T",  MATCH_VFNMACC_VF, MASK_VFNMACC_VF, match_opcode, 0},
 
-{"vfmsac.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMSAC_VV, MASK_VFMSAC_VV, match_opcode, 0},
-{"vfmsac.vf",  "V",   "Vd,S,Vt",  MATCH_VFMSAC_VF, MASK_VFMSAC_VF, match_opcode, 0},
+{"vfmsac.vv",  "V",   "D,S,T", MATCH_VFMSAC_VV, MASK_VFMSAC_VV, match_opcode, 0},
+{"vfmsac.vf",  "V",   "D,S,T",  MATCH_VFMSAC_VF, MASK_VFMSAC_VF, match_opcode, 0},
 
-{"vfnmsac.vv", "V",   "Vd,Vs,Vt", MATCH_VFNMSAC_VV, MASK_VFNMSAC_VV, match_opcode, 0},
-{"vfnmsac.vf", "V",   "Vd,S,Vt",  MATCH_VFNMSAC_VF, MASK_VFNMSAC_VF, match_opcode, 0},
+{"vfnmsac.vv", "V",   "D,S,T", MATCH_VFNMSAC_VV, MASK_VFNMSAC_VV, match_opcode, 0},
+{"vfnmsac.vf", "V",   "D,S,T",  MATCH_VFNMSAC_VF, MASK_VFNMSAC_VF, match_opcode, 0},
 
-{"vfmadd.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMADD_VV, MASK_VFMADD_VV, match_opcode, 0},
-{"vfmadd.vf",  "V",   "Vd,S,Vt",  MATCH_VFMADD_VF, MASK_VFMADD_VF, match_opcode, 0},
+{"vfmadd.vv",  "V",   "D,S,T", MATCH_VFMADD_VV, MASK_VFMADD_VV, match_opcode, 0},
+{"vfmadd.vf",  "V",   "D,S,T",  MATCH_VFMADD_VF, MASK_VFMADD_VF, match_opcode, 0},
 
-{"vfnmadd.vv", "V",   "Vd,Vs,Vt", MATCH_VFNMADD_VV, MASK_VFNMADD_VV, match_opcode, 0},
-{"vfnmadd.vf", "V",   "Vd,S,Vt",  MATCH_VFNMADD_VF, MASK_VFNMADD_VF, match_opcode, 0},
+{"vfnmadd.vv", "V",   "D,S,T", MATCH_VFNMADD_VV, MASK_VFNMADD_VV, match_opcode, 0},
+{"vfnmadd.vf", "V",   "D,S,T",  MATCH_VFNMADD_VF, MASK_VFNMADD_VF, match_opcode, 0},
 
-{"vfmsub.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMSUB_VV, MASK_VFMSUB_VV, match_opcode, 0},
-{"vfmsub.vf",  "V",   "Vd,S,Vt",  MATCH_VFMSUB_VF, MASK_VFMSUB_VF, match_opcode, 0},
+{"vfmsub.vv",  "V",   "D,S,T", MATCH_VFMSUB_VV, MASK_VFMSUB_VV, match_opcode, 0},
+{"vfmsub.vf",  "V",   "D,S,T",  MATCH_VFMSUB_VF, MASK_VFMSUB_VF, match_opcode, 0},
 
-{"vfnmsub.vv", "V",   "Vd,Vs,Vt", MATCH_VFNMSUB_VV, MASK_VFNMSUB_VV, match_opcode, 0},
-{"vfnmsub.vf", "V",   "Vd,S,Vt",  MATCH_VFNMSUB_VF, MASK_VFNMSUB_VF, match_opcode, 0},
+{"vfnmsub.vv", "V",   "D,S,T", MATCH_VFNMSUB_VV, MASK_VFNMSUB_VV, match_opcode, 0},
+{"vfnmsub.vf", "V",   "D,S,T",  MATCH_VFNMSUB_VF, MASK_VFNMSUB_VF, match_opcode, 0},
 
-{"vfsqrt.v",   "V",   "Vd,Vt", MATCH_VFSQRT_V, MASK_VFSQRT_V, match_opcode, 0},
+{"vfsqrt.v",   "V",   "D,T", MATCH_VFSQRT_V, MASK_VFSQRT_V, match_opcode, 0},
 
-{"vfmin.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMIN_VV, MASK_VFMIN_VV, match_opcode, 0},
-{"vfmin.vf",  "V",   "Vd,S,Vt",  MATCH_VFMIN_VF, MASK_VFMIN_VF, match_opcode, 0},
+{"vfmin.vv",  "V",   "D,S,T", MATCH_VFMIN_VV, MASK_VFMIN_VV, match_opcode, 0},
+{"vfmin.vf",  "V",   "D,S,T",  MATCH_VFMIN_VF, MASK_VFMIN_VF, match_opcode, 0},
 
-{"vfmax.vv",  "V",   "Vd,Vs,Vt", MATCH_VFMAX_VV, MASK_VFMAX_VV, match_opcode, 0},
-{"vfmax.vf",  "V",   "Vd,S,Vt",  MATCH_VFMAX_VF, MASK_VFMAX_VF, match_opcode, 0},
+{"vfmax.vv",  "V",   "D,S,T", MATCH_VFMAX_VV, MASK_VFMAX_VV, match_opcode, 0},
+{"vfmax.vf",  "V",   "D,S,T",  MATCH_VFMAX_VF, MASK_VFMAX_VF, match_opcode, 0},
 
-{"vfdgnj.vv", "V",   "Vd,Vs,Vt", MATCH_VFSGNJ_VV, MASK_VFSGNJ_VV, match_opcode, 0},
-{"vfdgnj.vf", "V",   "Vd,S,Vt",  MATCH_VFSGNJ_VF, MASK_VFSGNJ_VF, match_opcode, 0},
+{"vfdgnj.vv", "V",   "D,S,T", MATCH_VFSGNJ_VV, MASK_VFSGNJ_VV, match_opcode, 0},
+{"vfdgnj.vf", "V",   "D,S,T",  MATCH_VFSGNJ_VF, MASK_VFSGNJ_VF, match_opcode, 0},
 
-// {"vfdgnjn.vv", "V",   "Vd,Vs,Vt", MATCH_VFSGNJN_VV, MASK_VFSGNJN_VV, match_opcode, 0},
-// {"vfdgnjn.vf", "V",   "Vd,S,Vt",  MATCH_VFSGNJN_VF, MASK_VFSGNJN_VF, match_opcode, 0},
+// {"vfdgnjn.vv", "V",   "D,S,T", MATCH_VFSGNJN_VV, MASK_VFSGNJN_VV, match_opcode, 0},
+// {"vfdgnjn.vf", "V",   "D,S,T",  MATCH_VFSGNJN_VF, MASK_VFSGNJN_VF, match_opcode, 0},
 
-// {"vfdgnjx.vv", "V",   "Vd,Vs,Vt", MATCH_VFSGNJX_VV, MASK_VFSGNJX_VV, match_opcode, 0},
-// {"vfdgnjx.vf", "V",   "Vd,S,Vt",  MATCH_VFSGNJX_VF, MASK_VFSGNJX_VF, match_opcode, 0},
+// {"vfdgnjx.vv", "V",   "D,S,T", MATCH_VFSGNJX_VV, MASK_VFSGNJX_VV, match_opcode, 0},
+// {"vfdgnjx.vf", "V",   "D,S,T",  MATCH_VFSGNJX_VF, MASK_VFSGNJX_VF, match_opcode, 0},
 
-{"vslideup.vi", "V",   "Vd,Vt",  MATCH_VSLIDEUP_VI,   MASK_VSLIDEUP_VI,   match_opcode, 0},
-{"vslidedown.vi", "V", "Vd,Vt",  MATCH_VSLIDEDOWN_VI, MASK_VSLIDEDOWN_VI, match_opcode, 0},
+{"vslideup.vi", "V",   "D,T",  MATCH_VSLIDEUP_VI,   MASK_VSLIDEUP_VI,   match_opcode, 0},
+{"vslidedown.vi", "V", "D,T",  MATCH_VSLIDEDOWN_VI, MASK_VSLIDEDOWN_VI, match_opcode, 0},
 
 /* Terminate the list.  */
 {0, 0, 0, 0, 0, 0, 0}
