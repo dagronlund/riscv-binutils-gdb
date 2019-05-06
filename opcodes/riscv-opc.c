@@ -820,6 +820,8 @@ const struct riscv_opcode riscv_opcodes[] =
 // {"vfdgnjx.vv", "V",   "Vd,Vs,Vt", MATCH_VFSGNJX_VV, MASK_VFSGNJX_VV, match_opcode, 0},
 // {"vfdgnjx.vf", "V",   "Vd,S,Vt",  MATCH_VFSGNJX_VF, MASK_VFSGNJX_VF, match_opcode, 0},
 
+{"vslideup.vi", "V",   "Vd,Vt",  MATCH_VSLIDEUP_VI,   MASK_VSLIDEUP_VI,   match_opcode, 0},
+{"vslidedown.vi", "V", "Vd,Vt",  MATCH_VSLIDEDOWN_VI, MASK_VSLIDEDOWN_VI, match_opcode, 0},
 
 /* Terminate the list.  */
 {0, 0, 0, 0, 0, 0, 0}
